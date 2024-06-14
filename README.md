@@ -1,6 +1,12 @@
 # GKV-PROJECT
 Projek mata kuliah Grafika Komputer dan Visualisasi kelompok 5 K1.
-Projek ini menampilkan visualisasi dari sebuah data mengenai kualitas air di Telangana India, menggunakan javascript.
+Projek ini menampilkan visualisasi dari sebuah data mengenai kualitas air di Telangana India, menggunakan plotly, mapbox, javascript dan html.
+
+Anggota Kelompok:
+1. Annisa Hayatullah (G6401221009)
+2. Allyvia Adzhani Saputra (G6401221011)
+3. Muhammad Irsyad Fadillah (G6401221053)
+4. Muhammad Shidqi Abhinaya (G6401221096)
 
 # Bar Chart
 Barchart digunakan untuk menunjukkan hubungan antara EC(Electrical Conductivity) dengan TDS(Total Dissolved Solids) pada 10 distrik utama.
