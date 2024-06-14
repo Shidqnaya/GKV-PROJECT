@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV File Reader</title>
+    <!-- Add Plotly.js library -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <input type="file" id="fileInput">
+    <button onclick="handleFile()">Read CSV</button>
+
+    <!-- Div to contain the combined bubble chart -->
+    <div id="combinedBubbleChartContainer"></div>
+
+    <!-- Div to contain the bubble charts for each district -->
+    <div id="bubbleChartsContainer"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="bubble.js"></script>
+</body>
+</html>

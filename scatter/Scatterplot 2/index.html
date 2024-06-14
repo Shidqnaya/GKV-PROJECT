@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scatter Plot from CSV with Trendline</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+</head>
+<body>
+    <h1>Scatter Plot</h1>
+    <input type="file" id="fileInput" accept=".csv">
+    <div id="scatterPlot"></div>
+
+    <script>
+        document.getElementById('fileInput').addEventListener('change', handleFile);
+
+        function handleFile(event) {
+            const file = event.target.files[0];
+
+            if (!file) {
+                console.error('No file selected.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const csvData = event.target.result;
+                parseCSV(csvData);
+            };
+            reader.readAsText(file);
+        }
+
+        function parseCSV(csvData) {
+            const parsedData = Papa.parse(csvData, { header: true });
+
+            // Extract the necessary columns for the scatter plot
+            const xValues = [];
+            const yValues = [];
+            const labels = [];
+
+            parsedData.data.forEach(row => {
+                xValues.push(parseFloat(row['E.C']));
+                yValues.push(parseFloat(row['TDS']));
+                labels.push(row['district']);  
+            });
+
+            createScatterPlot(xValues, yValues, labels);
+        }
+
+        function createScatterPlot(xValues, yValues, labels) {
+            //  trendline
+            const { slope, intercept } = linearRegression(xValues, yValues);
+            const trendlineX = [Math.min(...xValues), Math.max(...xValues)];
+            const trendlineY = trendlineX.map(x => slope * x + intercept);
+
+            const traceScatter = {
+                x: xValues,
+                y: yValues,
+                mode: 'markers',
+                type: 'scatter',
+                text: labels,
+                marker: {
+                    size: 12
+                },
+                hoverinfo: 'text+x+y'  
+            };
+
+            const traceTrendline = {
+                x: trendlineX,
+                y: trendlineY,
+                mode: 'lines',
+                type: 'scatter',
+                line: {
+                    color: 'red',
+                    width: 2
+                },
+                name: 'Trendline'
+            };
+
+            const data = [traceScatter, traceTrendline];
+
+            const layout = {
+                title: 'Scatter Plot E.C vs TDS',
+                xaxis: {
+                    title: 'E.C'
+                },
+                yaxis: {
+                    title: 'TDS'
+                }
+            };
+
+            Plotly.newPlot('scatterPlot', data, layout);
+        }
+
+        function linearRegression(x, y) {
+            const n = x.length;
+            const sumX = x.reduce((a, b) => a + b, 0);
+            const sumY = y.reduce((a, b) => a + b, 0);
+            const sumXY = x.reduce((sum, xi, i) => sum + xi * y[i], 0);
+            const sumXX = x.reduce((sum, xi) => sum + xi * xi, 0);
+
+            const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+            const intercept = (sumY - slope * sumX) / n;
+
+            return { slope, intercept };
+        }
+    </script>
+</body>
+</html>
